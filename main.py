@@ -31,15 +31,11 @@ mydict = {}
 # Function that generates the sequences
 def Generate_Sequences(Dict):
     # loops through the dictionary and inserts the IRE into each position of the 5PRIME region
-    for i in range(len(FPRIME)):
+    for i in range(len(FPRIME)+1):
         test = FPRIME[:i] + IRE + FPRIME[i:]
         Dict[test] = 0
 
-    #Beacuse of looping issues this used these lines of code to put IRE in the end of the sequence.
-    #!!See if we can just have this happen in the for loop!!
-    Final_Pos = FPRIME + IRE
-    Dict[Final_Pos] = 0
-
+  
 
 #Runs the functions
 Generate_Sequences(mydict)

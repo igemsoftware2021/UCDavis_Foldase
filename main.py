@@ -44,3 +44,10 @@ def Generate_Sequences(Dict):
 #Runs the functions
 Generate_Sequences(mydict)
 Calculate_SEC_MFE(mydict)
+
+
+# Creates file "results.txt" and writes each key(sequence) and values(2nd struct and mfe) to the file from mydict
+file = open('results.txt', 'w')
+for results in mydict:
+    file. write('Sequence: ' + results + " " + "Secondary Structure and MFE: " + str(mydict.get(results)) + "\n")
+file.close()

@@ -1,46 +1,79 @@
-# Need to have an interface that takes two inputs
-# 1.) IRE
-# 2.) 5'UTR
-# Takes the inputs then runs them into the ssr script and gives output.
-# Project output
-# Don't got to be fancy just work
 from tkinter import *
+import RNA
 
-IRE = ""
-FPRIME = ""
-
-#Test to see if button function works
-def button_fold():
-    IRE = IR.get()
-    FPRIME = UTR.get()
-    Output = Label(root, text=IRE + FPRIME)
-    Output.grid(row=5, column=0)
-
-
-# Creating root widget needs to be done every time you're creating GUI
+# Creating root widget
 root = Tk()
 
-root.title("Project Cargo")
-Title = Label(root, text="RNA Fold",)
-Title.grid(row=0, column=0, columnspan=100)
 
+# Function to calculate both SEC and MFE
+def Calculate_SEC_MFE(sequences):
+    # RNA Sequence dictionary with sequences and free energy
+    temp_dict = sequences
+
+    # compute minimum free energy (MFE) and corresponding structure for each of the sequences stored in the dictionary
+    for sequence in temp_dict:
+        mfe = RNA.fold(sequence)
+        temp_dict[sequence] = mfe
+
+
+# Creates fold button that runs RNA.fold functions
+def button_fold():
+    global IRE
+    global FPRIME
+    IRE = IR.get()
+    FPRIME = UTR.get()
+
+    # Runs the RNA functions
+    Generate_Sequences(mydict)
+    Calculate_SEC_MFE(mydict)
+
+    # Creates file "results.txt" and writes each key(sequence) and values(2nd struct and mfe) to the file
+    file = open('results.txt', 'w')
+    for results in mydict:
+        file.write('Sequence: ' + results + " " + "Secondary Structure and MFE: " + str(mydict.get(results)) + "\n"*2)
+    file.close()
+
+    # Reads results.txt file and displays results
+    text_box = Text(root, width=150, height=30, borderwidth=10)
+    open_results = open('results.txt', 'r')
+    insert = open_results.read()
+    text_box.insert(END, insert)
+    text_box.grid(row=6, column=0)
+    open_results.close()
+
+
+# Function that generates the sequences
+def Generate_Sequences(Dict):
+    # loops through the dictionary and inserts the IRE into each position of the 5PRIME region
+    for i in range(len(FPRIME) + 1):
+        test = FPRIME[:i] + IRE + FPRIME[i:]
+        Dict[test] = 0
+
+
+# Dictionary which contains each of the sequences
+mydict = {}
+
+# Title of GUI
+root.title("Project Cargo")
+Title = Label(root, text="RNA Fold:", font=('Arial', 24))
+Title.grid(row=0, column=0, columnspan=100)
 
 # Creates IRE and UTR input widgets
 IR = Entry(root, width=70, borderwidth=10)
-IR.insert(0, "Type IRE Sequence ")
-IR.grid(row=1, column=0, columnspan=100)
+IR.grid(row=2, column=0, columnspan=100)
+IR.insert(0, 'AUGC')
+IR_text = Label(root, text='Type in your IRE sequence: ')
+IR_text.grid(row=1, column=0)
 
 UTR = Entry(root, width=70, borderwidth=10)
-UTR.insert(0, "Type 5'UTR Sequence ")
-UTR.grid(row=2, column=0, columnspan=100)
+UTR.grid(row=4, column=0, columnspan=100)
+UTR.insert(0, 'AUGC')
+UTR_text = Label(root, text="Type in your 5'UTR sequence: ")
+UTR_text.grid(row=3, column=0)
 
-# Button will run the RNA function (Currently just inserts text to make sure it works)
+# Button will run the RNA function
 fold_button = Button(root, text="Click to Fold", command=button_fold)
-fold_button.grid(row=3, column=0, columnspan=100)
-
-output_txt = Label(root, text="Output Sequence, Secondary Structure and MFE: ")
-output_txt.grid(row=4, column=0)
-
+fold_button.grid(row=5, column=0, columnspan=100)
 
 # Create event loop (keeps program running)
 root.mainloop()

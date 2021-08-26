@@ -13,7 +13,7 @@ def Calculate_SEC_MFE(sequences):
         mfe = RNA.fold(sequence)
         temp_dict[sequence] = mfe
 
-    # Used to index the position of the IRE in the 5'UTR
+    # Writes results in terminal, remove hashtags if you want this
     # j = 0
     # loop through the dictionary and print sequence with the secondary free structure and free energy
     # for sequence in temp_dict:

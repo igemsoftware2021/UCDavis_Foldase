@@ -1,4 +1,4 @@
-# IGEM-DryLab-
+# Foldase-
 This the repository for the IGEM DryLab Team
 
 Here you guys can also put updates and suggestions as to the code and also servers as a timeline to the code.\
